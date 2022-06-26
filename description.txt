@@ -1,0 +1,59 @@
+***write in cmd***
+
+use smpatel1;   // create database with name
+db.createCollection("users");   // create collection
+db.users.insert( {name: 'test data', lang: ['PHP', 'Node'], company: {addr: 'XYZ', phone: 0123456789} } );   // insert data
+db.users.insert( [ {name: 'test data'}, {name: 'test1 data'} ] );   // insert multiple data
+db.users.insertOne( {name: 'dummy 4', email: 'dummy4@gmail.com'} );
+db.users.insertMany( [ {name: 'dummy 4', email: 'dummy4@gmail.com'}, {..............} ] );
+show collections;
+db.users.find();
+db.users.find().pretty();
+db.users.find( {email: 'dummy4@gmail.com'} ).pretty();
+db.users.find( { $or: [ {email: 'dummy4@gmail.com'}, {name: 'dummy 4'} ] } ).pretty();
+db.users.find( { $and: [ {email: 'dummy4@gmail.com'}, {name: 'dummy 4'} ] } ).pretty();
+db.users.find( {age: {$lt: 26} } ).pretty();
+db.users.find( {age: {$lte: 26} } ).pretty();
+db.users.find( {age: {$gt: 26} } ).pretty();
+db.users.find( {age: {$gte: 26} } ).pretty();
+db.users.find( {age: /dummy/ } ).pretty();   // Like
+db.users.find( {$nor: [ {name: 'dummy 4'}, {email: 'dummy4@gmail.com'} ] } ).pretty();   // {} or {}
+db.users.find( {$not: [ {name: 'dummy 4'}, {email: 'dummy4@gmail.com'} ] } ).pretty();   // {} and {}
+db.users.find( {name: 'dummy data', $or: [ {age: 25}, {email: 'dummy@gmail.com'} ] } ).pretty();   // and or
+db.users.find( {}, {name: 1, email: 1, _id: 0} ).pretty();   // projection
+db.users.update( {email: 'dummy@gmail.com'}, {$set: {age: 26} } );   // update
+db.users.update( {name: 'dummy data'}, {$set: {age: 40} }, {multi: true} );   // update
+db.users.remove( {name: 'dummy1 data'} );   // delete many for same name
+db.users.remove( {name: 'dummy1 data'}, 1 );   // delete one
+db.users.deleteOne( {name: 'dummy1 data'} );   // delete one
+db.users.deleteMany( {name: 'dummy1 data'} );   // delete many
+db.users.find().limit(3);   // limit
+db.users.find().skip(2);   // skip
+db.users.find().limit(3).skip(1);   // limit & skip
+db.users.find().sort( {name: 1} );   // Ascending or descending
+db.users.find( {'address.pincode': '221212'} ).pretty();   // find in nest
+db.users.find( {'social': {$elemMatch: {name: 'Youtube'} } } ).pretty();   // social is field & name is sub-field fetch data from all document
+db.users.distinct('age', {status: 'active'} );   // find age from doc. where status is active
+db.users.find().count();   // no. of document in collection
+db.users.find( {status: 'active'} ).count();   // no. of document in collection where status is active
+db.users.aggregate( [ {$match: {'status': 'active'} } ] ).pretty();   // fetch doc. where status is active
+db.users.aggregate( [ {$group: {_id: '$department'} } ] ).pretty();   // create group of _id field and store dep. value
+db.users.aggregate( [ {$group: {_id: '$department', totalMarks: {$sum: '$mark'} } } ] ).pretty();   // fetch sum of mark from same department
+db.users.aggregate( [ {$group: {_id: '$department', totalMarks: {$avg: '$mark'} } } ] ).pretty();   // fetch avg of mark from same department
+db.users.aggregate( [ {$group: {_id: {age: '$age'} } } ] ).pretty();   // create group of _id field and store object
+db.users.aggregate( [ {$group: {_id: '$department'} }, {$skip: 1} ] ).pretty();
+db.users.aggregate( [ {$group: {_id: '$department'} }, {$skip: 1}, {$sort: {_id: 1} } ] ).pretty();
+db.users.aggregate( [ {$match: {'status': 'active'} }, {$project: {name: 1} } ] ).pretty();
+db.users.aggregate( [ {$match: {'status': 'active'} }, {$project: {name: 1, age: {$type: '$age'} } } ] ).pretty();
+db.users.aggregate( [ {$count: 'totals'} ] );
+db.users.aggregate( [ {$match: {status: 'active'} }, {$limit: 1} ] ).pretty();
+db.users.aggregate( [ {$unwind: '$language'}, {$project: {name: 1, language: 1} } ] ).pretty();
+db.users.aggregate( [ {$match: {status: 'active'} }, {$project: {name: 1, _id: 0} }, {'$out': 'info'} ] ).pretty();    // create new collection name by info
+
+next mongodump............
+
+npm init -y
+npm i express
+npm i mongoose
+npm i validator
+npm i nodemon
